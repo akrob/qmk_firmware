@@ -133,11 +133,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_DUAL] = LAYOUT_kc(
   //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
-         ,XXXX,XXXX,XXXX,XXXX,XXXX,               XXXX,XXXX,XXXX,XXXX,XXXX,XXXX,
+         ,XXXX,XXXX,XXXX,XXXX,XXXX,               XXXX,XXXX,XXXX,XXXX,XXXX,    ,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
-         ,EXLM, AT ,HASH,DLR ,PERC,               CIRC,AMPR,ASTR,LPRN,RPRN,XXXX,
+         ,EXLM, AT ,HASH,DLR ,PERC,               CIRC,AMPR,ASTR,LPRN,RPRN,    ,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
-         , 1  , 2  , 3  , 4  , 5  ,                6  , 7  , 8  , 9  , 0  ,XXXX,
+         , 1  , 2  , 3  , 4  , 5  ,                6  , 7  , 8  , 9  , 0  ,ENT ,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
          ,LGU1,LGU2,LGU3,LGU4,LGU5,CONF,     BTN2,LGU6,LGU7,LGU8,LGU9,LGU0,    ,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'

@@ -6,14 +6,16 @@ extern keymap_config_t keymap_config;
 
 #define _QWERTY 0
 #define _COLEMAK 1
-#define _RLAYER 2
-#define _LLAYER 3
-#define _DUAL 4
-#define _CONFIG 5
+#define _X1 2
+#define _RLAYER 3
+#define _LLAYER 4
+#define _DUAL 5
+#define _CONFIG 6
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,        // qwerty base layer
   COLEMAK,                    // colemak base layer
+  X1,                         // x1 carbon base layer
   RLAYER,                     // right layer
   LLAYER,                     // left layer
   RLOCK,                      // right layer LOCK
@@ -28,8 +30,10 @@ enum custom_keycodes {
 enum {
   TD_LGUIAPP,                 // LGUI x1, app/menu x2
   TD_SHIFTCAPS,               // LSHIFT x1, CAPS x3
+  TD_SHIFTX1CAPS,               // LSHIFT x1, LCTL x3 (for x1 carbon layer)
   TD_CTRLALTDL,               // CTRL+ALT+DEL x3
   TD_SHIFTCLAT,               // LSHIFT x1, LCRTL x2, LALT x3, CTRL+ALT x4
+  TD_SHIFTX1CLAT,             // RSHIFT x1, LCAPS x2, LALT x3, CTRL+ALT x4 (for x1 carbon layer)
 };
 
 /* NOOP Key and Transparent */
@@ -43,6 +47,7 @@ enum {
 #define KC_LLOK LLOCK
 #define KC_QWER QWERTY
 #define KC_COLE COLEMAK
+#define KC_X1   X1
 #define KC_DUAL DUAL
 #define KC_CONF CONFIG
 #define KC_BLUP LEDUP
@@ -69,9 +74,10 @@ enum {
 /* Tap Dance */
 #define KC_LGUA TD(TD_LGUIAPP)
 #define KC_SHCP TD(TD_SHIFTCAPS)
+#define KC_XSCP TD(TD_SHIFTX1CAPS)
 #define KC_CADL TD(TD_CTRLALTDL)
 #define KC_SHCA TD(TD_SHIFTCLAT)
-
+#define KC_XSCA TD(TD_SHIFTX1CLAT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -98,6 +104,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      CTEC, A  , R  , S  , T  , D  ,                H  , N  , E  , I  , O  ,ENT ,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
      SHCP, Z  , X  , C  , V  , B  ,LLOK,     RLOK, K  , M  ,COMM,DOT ,SLSH,SHCA,
+  //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
+                       LALT,LLAY,TAB ,        SPC ,RLAY,LGUA
+  //                  `----+----+----'        `----+----+----'
+  ),
+
+  [_X1] = LAYOUT_kc(
+  //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
+     CADL, 1  , 2  , 3  , 4  , 5  ,                6  , 7  , 8  , 9  , 0  ,BSPC,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+     TAB , Q  , W  , E  , R  , T  ,                Y  , U  , I  , O  , P  ,DEL ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+     LCTL, A  , S  , D  , F  , G  ,                H  , J  , K  , L  ,SCLN,ENT ,
+  //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
+     XSCP, Z  , X  , C  , V  , B  ,LLOK,     RLOK, N  , M  ,COMM,DOT ,SLSH,XSCA,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
                        LALT,LLAY,TAB ,        SPC ,RLAY,LGUA
   //                  `----+----+----'        `----+----+----'
@@ -153,7 +173,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
      XXXX,XXXX,XXXX,XXXX,XXXX,XXXX,               XXXX,XXXX,XXXX,XXXX,XXXX,XXXX,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
-     XXXX,XXXX,XXXX,COLE,XXXX,XXXX,    ,         ,XXXX,XXXX,XXXX,XXXX,XXXX,XXXX,
+     XXXX,XXXX, X1 ,COLE,XXXX,XXXX,    ,         ,XXXX,XXXX,XXXX,XXXX,XXXX,XXXX,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
                        XXXX,    ,XXXX,        XXXX,    ,XXXX
   //                  `----+----+----'        `----+----+----'
@@ -196,6 +216,20 @@ void shift_caps_up (qk_tap_dance_state_t *state, void *user_data) {
     unregister_code (KC_LSFT);
   }
 }
+void shift_x1_caps_down (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count >= 3) {
+    register_code (KC_LCTL);
+  } else {
+    register_code (KC_LSFT);
+  }
+}
+void shift_x1_caps_up (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count >= 3) {
+    unregister_code (KC_LCTL);
+  } else {
+    unregister_code (KC_LSFT);
+  }
+}
 void shift_ctrlalt_down (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count >= 4) {
     register_code (KC_LCTL);
@@ -220,6 +254,30 @@ void shift_ctlalt_up (qk_tap_dance_state_t *state, void *user_data) {
     unregister_code (KC_RSFT);
   }
 }
+void shift_x1_ctrlalt_down (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count >= 4) {
+    register_code (KC_LALT);
+    register_code (KC_CAPS);
+  } else if (state->count == 3) {
+    register_code (KC_LALT);
+  } else if (state->count == 2) {
+    register_code (KC_CAPS);
+  } else {
+    register_code (KC_RSFT);
+  }
+}
+void shift_x1_ctlalt_up (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count >= 4) {
+    unregister_code (KC_CAPS);
+    unregister_code (KC_LALT);
+  } else if (state->count == 3) {
+    unregister_code (KC_LALT);
+  } else if (state->count == 2) {
+    unregister_code (KC_CAPS);
+  } else {
+    unregister_code (KC_RSFT);
+  }
+}
 void ctrlaltdel_up (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count >= 3) {
     unregister_code (KC_DEL);
@@ -239,7 +297,9 @@ void ctrlaltdel_down (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
         [TD_LGUIAPP] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, KC_APP),
         [TD_SHIFTCAPS] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, shift_caps_down, shift_caps_up),
+        [TD_SHIFTX1CAPS] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, shift_x1_caps_down, shift_x1_caps_up),
         [TD_SHIFTCLAT] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, shift_ctrlalt_down, shift_ctlalt_up),
+        [TD_SHIFTX1CLAT] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, shift_x1_ctrlalt_down, shift_x1_ctlalt_up),
         [TD_CTRLALTDL] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, ctrlaltdel_down, ctrlaltdel_up)
 };
 /* END TAP DANCE */
@@ -266,6 +326,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case COLEMAK:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_COLEMAK);
+        configOn = false;
+        if (momentaryRBLLevel != 0 || momentaryLBLLevel != 0){
+          backlight_toggle();
+        }
+      }
+      return false;
+      break;
+    case X1:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_X1);
         configOn = false;
         if (momentaryRBLLevel != 0 || momentaryLBLLevel != 0){
           backlight_toggle();

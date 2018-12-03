@@ -7,15 +7,17 @@ extern keymap_config_t keymap_config;
 #define _QWERTY 0
 #define _COLEMAK 1
 #define _X1 2
-#define _RLAYER 3
-#define _LLAYER 4
-#define _DUAL 5
-#define _CONFIG 6
+#define _X1RLAYER 3
+#define _RLAYER 4 
+#define _LLAYER 5
+#define _DUAL 6
+#define _CONFIG 7
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,        // qwerty base layer
   COLEMAK,                    // colemak base layer
   X1,                         // x1 carbon base layer
+  X1RLAYER,                   // x1 carbon right layer
   RLAYER,                     // right layer
   LLAYER,                     // left layer
   RLOCK,                      // right layer LOCK
@@ -123,6 +125,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //                  `----+----+----'        `----+----+----'
   ),
 
+  [_X1RLAYER] = LAYOUT_kc(
+  //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
+         ,SLCK,SYSR,PSCR,INS ,PAUS,               MUTE,VOLD,VOLU,BLDN,BLUP,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,TILD,GRV ,EQL ,LBRC,RBRC,               ASTR,PGUP, UP ,HOME,PLUS,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,EXLM,PIPE,DLR ,LPRN,RPRN,               AMPR,LEFT,DOWN,RGHT,MINS,QUOT,
+  //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
+         , AT ,HASH,PERC,LCBR,RCBR,    ,         ,CIRC,PGDN ,UNDS,END ,BSLS,    ,
+  //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
+                           ,    ,    ,            ,    ,
+  //                  `----+----+----'        `----+----+----'
+  ),
+
   [_RLAYER] = LAYOUT_kc(
   //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
          ,SLCK,SYSR,PSCR,INS ,PAUS,               MUTE,VOLD,VOLU,BLDN,BLUP,    ,
@@ -199,6 +215,7 @@ int lockedBLLevel;
 int momentaryLBLLevel;
 int momentaryRBLLevel;
 int currentBL;
+bool x1Enabled = false;
 /* END VARIABLES */
 
 /* TAP DANCE */
@@ -317,6 +334,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         set_single_persistent_default_layer(_QWERTY);
         configOn = false;
+        x1Enabled = false;
         if (momentaryRBLLevel != 0 || momentaryLBLLevel != 0){
           backlight_toggle();
         }
@@ -327,6 +345,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         set_single_persistent_default_layer(_COLEMAK);
         configOn = false;
+        x1Enabled = false;
         if (momentaryRBLLevel != 0 || momentaryLBLLevel != 0){
           backlight_toggle();
         }
@@ -337,6 +356,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         set_single_persistent_default_layer(_X1);
         configOn = false;
+        x1Enabled = true;
         if (momentaryRBLLevel != 0 || momentaryLBLLevel != 0){
           backlight_toggle();
         }
@@ -355,8 +375,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case RLAYER:
       if (record->event.pressed) {
-        layer_on(_RLAYER);
-        update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        if (x1Enabled){
+          layer_on(_X1RLAYER);
+          update_tri_layer(_X1RLAYER, _LLAYER, _DUAL);
+        } else {
+          layer_on(_RLAYER);
+          update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        }
         momentaryRBLLevel = get_backlight_level();
         if (momentaryRBLLevel != 0 || momentaryLBLLevel != 0){
           for (int i = 0; i < layerBLStep ; i++){
@@ -365,8 +390,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       } else {
         unregister_code(KC_LGUI);
-        layer_off(_RLAYER);
-        update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        if (x1Enabled){
+          layer_off(_X1RLAYER);
+          update_tri_layer(_X1RLAYER, _LLAYER, _DUAL);
+        } else {
+          layer_off(_RLAYER);
+          update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        }
         if ( llocked == false && configOn == false ) {
           for (int i = 0; i < layerBLStep ; i++){
             backlight_decrease();
@@ -380,7 +410,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case LLAYER:
       if (record->event.pressed) {
         layer_on(_LLAYER);
-        update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        if (x1Enabled){
+          update_tri_layer(_X1RLAYER, _LLAYER, _DUAL);
+        } else {
+          update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        }
         momentaryLBLLevel = get_backlight_level();
         if (momentaryRBLLevel != 0 || momentaryLBLLevel != 0){
           for (int i = 0; i < layerBLStep ; i++){
@@ -389,7 +423,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       } else {
         layer_off(_LLAYER);
-        update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        if (x1Enabled){
+          update_tri_layer(_X1RLAYER, _LLAYER, _DUAL);
+        } else {
+          update_tri_layer(_RLAYER, _LLAYER, _DUAL);
+        }
         if ( rlocked == false && configOn == false ) {
           for (int i = 0; i < layerBLStep ; i++){
             backlight_decrease();
@@ -402,7 +440,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case RLOCK:
       if (record->event.pressed) {
-        layer_on(_RLAYER);
+        if (x1Enabled){
+          layer_on(_X1RLAYER);
+        } else {
+          layer_on(_RLAYER);
+        }
         /* add logic to toggle backlight change when on a layer */
         if (rlocked == false && llocked == false){
           lockedBLLevel = get_backlight_level();

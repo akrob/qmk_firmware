@@ -119,7 +119,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
      CAGE, A  , S  , D  , F  , G  ,                H  , J  , K  , L  ,SCLN,CAGQ,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
-     SHCP,CTLZ,ALTX,GUIC, V  , B  ,XXXX,     XXXX, N  , M  ,GUCM,ALDT,CTSL,SHCA,
+     SHCP,CTLZ,ALTX,GUIC, V  , B  ,CONF,     XXXX, N  , M  ,GUCM,ALDT,CTSL,SHCA,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
                        TTNP,TBMS,TDNS,        TTSN,TSNV,ENT
   //                  `----+----+----'        `----+----+----'
@@ -239,7 +239,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_CONFIG] = LAYOUT_kc(
   //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
-     REST,XXXX,XXXX,XXXX,XXXX,XXXX,               XXXX,XXXX,XXXX,XXXX,XXXX,XXXX,
+     REST,XXXX,XXXX,XXXX,XXXX,XXXX,               XXXX,XXXX,XXXX,BLDN,BLUP,XXXX,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
      XXXX,QWER,XXXX,XXXX,XXXX,XXXX,               XXXX,XXXX,XXXX,XXXX,XXXX,XXXX,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
@@ -371,7 +371,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
         [TD_CTRLALTDL] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, ctrlaltdel_down, ctrlaltdel_up)
 };
 /* END TAP DANCE */
-
+int blSteps = 6;              // blSteps + 1 is the amount of brightness settings when manually adjusting
 bool x1Enabled = false;
 
 void persistent_default_layer_set(uint16_t default_layer) {
@@ -408,14 +408,33 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case LEDUP:
+      if (record->event.pressed) {
+        for (int i = 0; i < (BACKLIGHT_LEVELS / blSteps ) ; i++ ){
+          backlight_increase();
+        }
+      } else {
+      }
+      return false;
+      break;
+    case LEDDOWN:
+      if (record->event.pressed) {
+        for (int i = 0; i < (BACKLIGHT_LEVELS / blSteps ) ; i++ ){
+          backlight_decrease();
+        }
+      } else {
+      }
+      return false;
+      break;
   }
   return true;
 }
 
-//void matrix_init_user(void) {
-//  set_single_persistent_default_layer(_COLEMAK);
-//}
 /*
+void matrix_init_user(void) {
+  set_single_persistent_default_layer(_COLEMAK);
+}
+
 // LED breathing when a layer is locked
 void matrix_scan_user(void) {
   // Only breath if layer is locked

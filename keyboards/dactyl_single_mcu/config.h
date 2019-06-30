@@ -24,8 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT_ID      0x0000
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    Atomantium
-#define PRODUCT         dactyl-single-mcu
-#define DESCRIPTION     A custom keyboard
+#define PRODUCT         Dactyl Manuform - Single MCU
+#define DESCRIPTION     The Dactyl Manuform with a single MCU to improve performance
 
 /* key matrix size */
 #define MATRIX_ROWS 5

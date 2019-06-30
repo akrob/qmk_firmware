@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* key matrix size */
 #define MATRIX_ROWS 5
-#define MATRIX_COLS 6
+#define MATRIX_COLS 12
 
 /*
  * Keyboard Matrix Assignments
@@ -40,8 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * DIODE_DIRECTION: COL2ROW = COL = Anode (+), ROW = Cathode (-, marked on diode)
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
-#define MATRIX_ROW_PINS { 2, 3, 4, 5, 6 }
-#define MATRIX_COL_PINS { A3, A2, A1, A0, 15, 14}
 // Ascii art of pro micro. Pin names PD3, PD2, etc.
 //Usage| Name | Label      Label| Name | Usage
 //                   PORT          
@@ -58,9 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //Row1 | PB4    8          13    PB2 | Col1
 //Row0 | PB5    9          10    PB6 | Col0
 */
-//#define MATRIX_COL_PINS { D1, D0, D4, C6, D7 }
-#define MATRIX_COL_PINS { D1, D0, D4, C6, D7, E6 }
-//#define MATRIX_ROW_PINS { F4, F5, F6, F7, B1, B3 }
+#define MATRIX_COL_PINS { D3, B6, B2, B3, B5, B4, E6, D7, C6, D4, D0, D1 }
 #define MATRIX_ROW_PINS { F4, F5, F6, F7, B1 }
 #define UNUSED_PINS
 

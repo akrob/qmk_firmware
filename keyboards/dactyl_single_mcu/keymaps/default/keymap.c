@@ -20,7 +20,8 @@
 #define _COLEMAK 1
 #define _NAV 2
 #define _NUMSYM 3
-#define _NUMPAD 4
+#define _MOUSE 4
+#define _NUMPAD 5
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
@@ -38,11 +39,8 @@ enum custom_keycodes {
 #define GUI_COMM    GUI_T(KC_COMM)
 
 
-//#define T_NSTB LT(_NUMSYM, KC_TAB)
-#define T_RLET LT(_NAV, KC_ENT)
-#define T_LLNP LT(_NUMPAD, KC_DEL)
 #define T_NSDEL LT(_NUMSYM, KC_DEL)
-#define T_NPTAB LT(_NUMPAD, KC_TAB)
+#define T_NPTAB LT(_MOUSE, KC_TAB)
 #define KC_SINS LSFT(KC_INS)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -89,13 +87,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                   RESET , _______,          _______, _______
   //                                            └────────┴────────┘        └────────┴────────┘
   ),
+  [_MOUSE] = LAYOUT(
+  //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
+     XXXXXXX, XXXXXXX, XXXXXXX,  KC_UP ,  KC_F5 , XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_ENT ,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, _______, XXXXXXX, KC_BSPC, KC_SINS, KC_SPC ,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______,
+  //└────────┴────────┼────────┼────────┼────────┴────────┘                          └────────┴────────┼────────┼────────┼────────┴────────┘
+                       _______, _______,                                                                _______, _______,
+  //                  └────────┴────────┼────────┬────────┐                          ┌────────┬────────┼────────┴────────┘
+                                         _______, _______,                            _______, _______,
+  //                                    └───┬────┴───┬────┴───┐                 ┌────┴───┬────┴───┬────┘
+                                             _______, _______,                   _______, _______,
+  //                                        └───┬────┴───┬────┴───┐        ┌────┴───┬────┴───┬────┘
+                                                  RESET , _______,          _______, _______
+  //                                            └────────┴────────┘        └────────┴────────┘
+  ),
   [_NUMPAD] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     XXXXXXX, XXXXXXX, XXXXXXX,  KC_UP ,  KC_F5 , XXXXXXX,                            KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
+     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX ,                            KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     XXXXXXX, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_ENT ,                            KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
+     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX ,                            KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, XXXXXXX, XXXXXXX, KC_BSPC, KC_SINS, KC_SPC ,                            KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
+     _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX ,                            KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
   //└────────┴────────┼────────┼────────┼────────┴────────┘                          └────────┴────────┼────────┼────────┼────────┴────────┘
                        _______, _______,                                                                _______, _______,
   //                  └────────┴────────┼────────┬────────┐                          ┌────────┬────────┼────────┴────────┘

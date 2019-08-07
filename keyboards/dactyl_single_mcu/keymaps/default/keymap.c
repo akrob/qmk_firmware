@@ -29,15 +29,16 @@ enum custom_keycodes {
   QMKURL
 };
 
-#define ALT_DOT     ALT_T(KC_DOT)
-#define ALT_X       ALT_T(KC_X)
+//#define ALT_DOT     ALT_T(KC_DOT)
+//#define ALT_X       ALT_T(KC_X)
 
 #define CTL_SLSH    CTL_T(KC_SLSH)
 #define CTL_Z       CTL_T(KC_Z)
+#define CTL_EXLM    CTL_T(KC_EXLM)
+#define CTL_EQL     CTL_T(KC_EQL)
 
-#define GUI_C       GUI_T(KC_C)
-#define GUI_COMM    GUI_T(KC_COMM)
-
+//#define GUI_C       GUI_T(KC_C)
+//#define GUI_COMM    GUI_T(KC_COMM)
 
 #define T_NSDEL LT(_NUMSYM, KC_DEL)
 #define T_NPTAB LT(_MOUSE, KC_TAB)
@@ -84,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______,  KC_1  ,  KC_2  ,  KC_3  ,  KC_4  ,  KC_5  ,                             KC_6  ,  KC_7  ,  KC_8  ,  KC_9  ,  KC_0  , KC_MINS, 
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_TILD, KC_EXLM,  KC_AT , KC_HASH, KC_DLR , KC_PERC,                            KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS, KC_EQL , KC_UNDS,
+     KC_TILD,CTL_EXLM,  KC_AT , KC_HASH, KC_DLR , KC_PERC,                            KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS, CTL_EQL, KC_UNDS,
   //└────────┴────────┼────────┼────────┼────────┴────────┘                          └────────┴────────┼────────┼────────┼────────┴────────┘
                        _______, _______,                                                                _______, _______,
   //                  └────────┴────────┼────────┬────────┐                          ┌────────┬────────┼────────┴────────┘

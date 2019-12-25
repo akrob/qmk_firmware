@@ -22,4 +22,4 @@
 //#define PERMISIVE_HOLD
 #define TAPPING_TERM 175
 //#define TAPPING_FORCE_HOLD
-#define RETRO_TAPPING
+//#define RETRO_TAPPING

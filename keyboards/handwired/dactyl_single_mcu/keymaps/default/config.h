@@ -23,3 +23,8 @@
 #define TAPPING_TERM 175
 //#define TAPPING_FORCE_HOLD
 //#define RETRO_TAPPING
+
+
+// Figuring out leader key
+#define LEADER_TIMEOUT 400
+#define LEADER_PER_KEY_TIMEING

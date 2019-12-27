@@ -15,20 +15,13 @@
  */
 #include QMK_KEYBOARD_H
 
-
 #define _QWERTY 0
-#define _COLEMAK 1
+//#define _COLEMAK 1
 #define _NAV 2
 #define _NUMSYM 3
 #define _FNUM 4
 #define _NUMPAD 5
 #define _MOUSE 6
-
-// Defines the keycodes used by our macros in process_record_user
-enum custom_keycodes {
-  QMKBEST = SAFE_RANGE,
-  QMKURL
-};
 
 #define ALT_DOT     ALT_T(KC_DOT)
 #define ALT_X       ALT_T(KC_X)
@@ -170,24 +163,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case QMKBEST:
-      if (record->event.pressed) {
-        // when keycode QMKBEST is pressed
-        SEND_STRING("QMK is the best thing ever!");
-      } else {
-        // when keycode QMKBEST is released
-      }
-      break;
-    case QMKURL:
-      if (record->event.pressed) {
-        // when keycode QMKURL is pressed
-        SEND_STRING("https://qmk.fm/" SS_TAP(X_ENTER));
-      } else {
-        // when keycode QMKURL is released
-      }
-      break;
-  }
   return true;
 }
 
@@ -196,30 +171,23 @@ void matrix_init_user(void) {
 }
 
 LEADER_EXTERNS();
-
 void matrix_scan_user(void) {
   LEADER_DICTIONARY() {
     leading = false;
     leader_end();
 
     SEQ_ONE_KEY(KC_F) {
-      // Anything you can do in a macro.
-      SEND_STRING("QMK is awesome.");
+      SEND_STRING("QMK Leader is working");
     }
-    SEQ_TWO_KEYS(KC_D, KC_D) {
-      SEND_STRING(SS_LCTL("a") SS_LCTL("c"));
-    }
-    SEQ_THREE_KEYS(KC_D, KC_D, KC_S) {
-      SEND_STRING("https://start.duckduckgo.com\n");
-    }
-    SEQ_TWO_KEYS(KC_A, KC_S) {
-      register_code(KC_LGUI);
-      register_code(KC_S);
-      unregister_code(KC_S);
-      unregister_code(KC_LGUI);
+    SEQ_ONE_KEY(KC_B) {
+      register_code(KC_CAPS);
+      register_code(KC_B);
+      unregister_code(KC_B);
+      unregister_code(KC_CAPS);
     }
   }
 }
+
 void led_set_user(uint8_t usb_led) {
 
 }

@@ -32,12 +32,10 @@ enum custom_keycodes {
 
 #define ALT_DOT     ALT_T(KC_DOT)
 #define ALT_X       ALT_T(KC_X)
-
-#define CTL_SLSH    CTL_T(KC_SLSH)
+#define CT_SLSH    CTL_T(KC_SLSH)
 #define CTL_Z       CTL_T(KC_Z)
-
 #define GUI_C       GUI_T(KC_C)
-#define GUI_COMM    GUI_T(KC_COMM)
+#define GU_COMM    GUI_T(KC_COMM)
 
 
 //#define T_NSDEL LT(_LEFT, KC_DEL)
@@ -51,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_ESC ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,                             KC_H  ,  KC_J  ,  KC_K  ,  KC_L  , KC_SCLN, KC_QUOT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT,  CTL_Z ,  ALT_X ,  GUI_C ,  KC_V  ,  KC_B  ,                             KC_N  ,  KC_M  ,GUI_COMM, ALT_DOT,CTL_SLSH, KC_RSFT,
+     KC_LSFT,  CTL_Z ,  ALT_X ,  GUI_C ,  KC_V  ,  KC_B  ,                             KC_N  ,  KC_M  , GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
   //└────────┴────────┼────────┼────────┼────────┴────────┘                          └────────┴────────┼────────┼────────┼────────┴────────┘
                        KC_LPRN, KC_RPRN,                                                                KC_LBRC, KC_RBRC,
   //                  └────────┴────────┼────────┬────────┐                          ┌────────┬────────┼────────┴────────┘
@@ -98,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_DUAL] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX,
+      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            KC_MUTE, KC_VOLD, KC_VOLU, KC_BRID, KC_BRIU, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______,  KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 ,  KC_F5 ,                             KC_F6 ,  KC_F7 ,  KC_F8 ,  KC_F9 ,  KC_F10, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤

@@ -49,7 +49,7 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( /* Base */
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-      RESET ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                             KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , KC_BSLS,
+     XXXXXXX,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                             KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_ESC ,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,                             KC_H  ,  KC_J  ,  KC_K  ,  KC_L  , KC_SCLN, KC_QUOT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -66,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_RIGHT] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-      RESET , KC_TILD, KC_GRV , KC_LBRC, KC_RBRC, XXXXXXX,                            KC_HOME, KC_PGUP,  KC_UP , KC_PGDN, XXXXXXX,TO(_RIGHT),
+      RESET , KC_TILD, KC_GRV , KC_LBRC, KC_RBRC, XXXXXXX,                            KC_HOME, KC_PGUP,  KC_UP , KC_PGDN, XXXXXXX,  RLOCK ,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, KC_EXLM,  KC_AT , KC_LPRN, KC_RPRN, KC_DLR ,                            KC_END , KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_UNDS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -83,11 +83,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_LEFT] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                         ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     TO(_LEFT),XXXXXXX, XXXXXXX,  KC_UP ,  KC_F5 , XXXXXXX,                           KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
+      LLOCK , XXXXXXX, XXXXXXX,  KC_UP ,  KC_F5 , XXXXXXX,                           KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_ENT ,                            KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
+     _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_ENT ,                           KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, KC_PSCR, KC_DEL , KC_BSPC, KC_SINS, KC_SPC ,                            KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
+     _______, KC_PSCR, KC_DEL , KC_BSPC, KC_SINS, KC_SPC ,                           KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
   //└────────┴────────┼────────┼────────┼────────┴────────┘                         └────────┴────────┼────────┼────────┼────────┴────────┘
                        _______, _______,                                                               _______, _______,
   //                  └────────┴────────┼────────┬────────┐                         ┌────────┬────────┼────────┴────────┘

@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // you hold it, and when this option isn't enabled, z rapidly followed by x actually sends Ctrl-x. That's bad.)
 #define IGNORE_MOD_TAP_INTERRUPT
 //#define PERMISIVE_HOLD
-#define TAPPING_TERM 150
+#define TAPPING_TERM 185
 //#define TAPPING_FORCE_HOLD
 //#define RETRO_TAPPING
 

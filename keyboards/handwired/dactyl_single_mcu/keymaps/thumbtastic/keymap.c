@@ -24,10 +24,14 @@
 // Used for Custom Tap/Hold for layers
 #define KEY_DELAY 150
 static uint16_t key_timer;
+bool rlocked = false;
+bool llocked = false;
 
 enum custom_keycodes {
   RIGHT,
-  LEFT
+  LEFT,
+  RLOCK,
+  LLOCK
 };
 
 #define ALT_DOT     ALT_T(KC_DOT)
@@ -137,16 +141,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case RIGHT:
       if (record->event.pressed){
+        rlocked = false;
         layer_on(_RIGHT);
         update_tri_layer(_RIGHT, _LEFT, _DUAL);
       } else {
-        layer_off(_RIGHT);
-        update_tri_layer(_RIGHT, _LEFT, _DUAL);
+        if (rlocked  == false){
+          layer_off(_RIGHT);
+          update_tri_layer(_RIGHT, _LEFT, _DUAL);
+        }
       }
       return false;
       break;
     case LEFT:
       if (record->event.pressed){
+        llocked = false;
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
         layer_on(_LEFT);
         update_tri_layer(_RIGHT, _LEFT, _DUAL);
@@ -156,8 +164,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           register_code(KC_TAB);
           unregister_code(KC_TAB);
         }
-        layer_off(_LEFT);
-        update_tri_layer(_RIGHT, _LEFT, _DUAL);
+        if (llocked == false){
+          layer_off(_LEFT);
+          update_tri_layer(_RIGHT, _LEFT, _DUAL);
+        }
+      }
+      return false;
+      break;
+    case RLOCK:
+      if (record->event.pressed) {
+        rlocked = true;
+      }
+      return false;
+      break;
+    case LLOCK:
+      if (record->event.pressed) {
+        llocked = true;
       }
       return false;
       break;

@@ -9,12 +9,15 @@
 // Used for Custom Tap/Hold for layers
 #define KEY_DELAY 150
 static uint16_t key_timer;
+bool rlocked = false;
+bool llocked = false;
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   RIGHT,
   LEFT,
-  DUAL,
+  RLOCK,
+  LLOCK
 };
 
 #define ALT_DOT     ALT_T(KC_DOT)
@@ -45,7 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     XXXXXXX, KC_TILD, KC_GRV, KC_LBRC, KC_RBRC,  XXXXXXX,                            KC_HOME, KC_PGUP,   KC_UP, KC_PGDN, XXXXXXX, XXXXXXX,
+     XXXXXXX, KC_TILD, KC_GRV, KC_LBRC, KC_RBRC,  XXXXXXX,                            KC_HOME, KC_PGUP,   KC_UP, KC_PGDN, XXXXXXX,  RLOCK,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, KC_EXLM, KC_AT , KC_LPRN, KC_RPRN,  KC_DLR,                             KC_END , KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_UNDS,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -59,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     XXXXXXX, XXXXXXX, XXXXXXX,  KC_UP ,  KC_F5 , XXXXXXX,                            KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
+      LLOCK , XXXXXXX, XXXXXXX,  KC_UP ,  KC_F5 , XXXXXXX,                            KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_ENT ,                            KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -92,8 +95,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case RIGHT:
+      if (record->event.pressed) {
+        rlocked = false;
+        layer_on(_RIGHT);
+        update_tri_layer(_LEFT, _RIGHT, _DUAL);
+      } else {
+        if (rlocked == false){
+          layer_off(_RIGHT);
+          update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        }
+      }
+      return false;
+      break;
     case LEFT:
       if (record->event.pressed) {
+        llocked = false;
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
         layer_on(_LEFT);
         update_tri_layer(_LEFT, _RIGHT, _DUAL);
@@ -103,26 +120,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           register_code(KC_TAB);
           unregister_code(KC_TAB);
         }
-        layer_off(_LEFT);
-        update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        if (llocked == false){
+          layer_off(_LEFT);
+          update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        }
       }
       return false;
       break;
-    case RIGHT:
+    case RLOCK:
       if (record->event.pressed) {
-        layer_on(_RIGHT);
-        update_tri_layer(_LEFT, _RIGHT, _DUAL);
-      } else {
-        layer_off(_RIGHT);
-        update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        rlocked = true;
       }
       return false;
       break;
-    case DUAL:
+    case LLOCK:
       if (record->event.pressed) {
-        layer_on(_DUAL);
-      } else {
-        layer_off(_DUAL);
+        llocked = true;
       }
       return false;
       break;

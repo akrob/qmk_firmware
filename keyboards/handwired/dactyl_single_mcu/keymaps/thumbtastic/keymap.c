@@ -29,7 +29,7 @@ bool rlocked = false;
 bool llocked = false;
 
 enum custom_keycodes {
-  RIGHT,
+  RIGHT = SAFE_RANGE,
   LEFT,
   RLOCK,
   LLOCK,
@@ -43,9 +43,6 @@ enum custom_keycodes {
 #define GUI_C       GUI_T(KC_C)
 #define GU_COMM    GUI_T(KC_COMM)
 
-
-//#define T_NSDEL LT(_LEFT, KC_DEL)
-//#define T_NPTAB LT(_MOUSE, KC_TAB)
 #define KC_SINS LSFT(KC_INS)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {

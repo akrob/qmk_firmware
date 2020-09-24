@@ -16,14 +16,15 @@
 #include QMK_KEYBOARD_H
 
 #define _QWERTY 0
-//#define _COLEMAK 1
-#define _RIGHT 2
-#define _LEFT 3
-#define _DUAL 4
+#define _RIGHT 1
+#define _LEFT 2
+#define _DUAL 3
 
 // Used for Custom Tap/Hold for layers
 #define KEY_DELAY 150
 static uint16_t key_timer;
+#define RESET_DELAY 5000
+static uint16_t reset_timer;
 bool rlocked = false;
 bool llocked = false;
 
@@ -32,7 +33,7 @@ enum custom_keycodes {
   LEFT,
   RLOCK,
   LLOCK,
-  LREST
+  RSTDL
 };
 
 #define ALT_DOT     ALT_T(KC_DOT)
@@ -50,7 +51,7 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( /* Base */
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-      LREST ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                             KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , KC_BSLS,
+      RSTDL ,  KC_Q  ,  KC_W  ,  KC_E  ,  KC_R  ,  KC_T  ,                             KC_Y  ,  KC_U  ,  KC_I  ,  KC_O  ,  KC_P  , KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_CAPS,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,  KC_G  ,                             KC_H  ,  KC_J  ,  KC_K  ,  KC_L  , KC_SCLN, KC_QUOT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -184,14 +185,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case LREST:
+    case RSTDL:
       if (record->event.pressed){
-        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+        reset_timer = timer_read(); // if the key is being pressed, we start the timer.
+        eeconfig_init();
       } else {
         // only if key is being held
-        if (timer_elapsed(key_timer) > KEY_DELAY) {
-          register_code(RESET);
-          unregister_code(RESET);
+        if (timer_elapsed(reset_timer) > RESET_DELAY) {
+          reset_keyboard();
+        }
       }
       return false;
       break;

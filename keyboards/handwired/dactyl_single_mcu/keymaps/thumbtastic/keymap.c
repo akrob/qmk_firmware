@@ -42,7 +42,6 @@ enum custom_keycodes {
 #define CTL_Z       CTL_T(KC_Z)
 #define GUI_C       GUI_T(KC_C)
 #define GU_COMM    GUI_T(KC_COMM)
-
 #define KC_SINS LSFT(KC_INS)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -65,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_RIGHT] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     _______, KC_TILD, KC_GRV , KC_LBRC, KC_RBRC, XXXXXXX,                            KC_HOME, KC_PGUP,  KC_UP , KC_PGDN, XXXXXXX,  RLOCK ,
+     XXXXXXX, KC_TILD, KC_GRV , KC_LBRC, KC_RBRC, XXXXXXX,                            KC_HOME, KC_PGUP,  KC_UP , KC_PGDN, XXXXXXX,  RLOCK ,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, KC_EXLM,  KC_AT , KC_LPRN, KC_RPRN, KC_DLR ,                            KC_END , KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_UNDS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -107,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //└────────┴────────┼────────┼────────┼────────┴────────┘                          └────────┴────────┼────────┼────────┼────────┴────────┘
                        _______, _______,                                                                _______, _______,
   //                  └────────┴────────┼────────┬────────┐                          ┌────────┬────────┼────────┴────────┘
-                                         _______, _______,                            KC_SPC , _______,
+                                         _______, _______,                            _______, _______,
   //                                    └───┬────┴───┬────┴───┐                 ┌────┴───┬────┴───┬────┘
                                              _______, _______,                   _______, _______,
   //                                        └───┬────┴───┬────┴───┐        ┌────┴───┬────┴───┬────┘
@@ -185,7 +184,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case RSTDL:
       if (record->event.pressed){
         reset_timer = timer_read(); // if the key is being pressed, we start the timer.
-        eeconfig_init();
       } else {
         // only if key is being held
         if (timer_elapsed(reset_timer) > RESET_DELAY) {

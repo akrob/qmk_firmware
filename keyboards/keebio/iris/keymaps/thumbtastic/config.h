@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Use I2C or Serial, not both */
 
-//#define USE_SERIAL
+#define USE_SERIAL
 // #define USE_I2C
 
 /* Select hand configuration */
@@ -53,6 +53,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
 #define NO_USB_STARTUP_CHECK
-
-// LEADER KEY
-#define LEADER_TIMEOUT 400

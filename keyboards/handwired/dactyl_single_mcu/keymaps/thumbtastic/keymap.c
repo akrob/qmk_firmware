@@ -185,9 +185,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed){
         reset_timer = timer_read(); // if the key is being pressed, we start the timer.
       } else {
-        // only if key is being held
+        // only RESET if it is REALLY being held 5+ seconds
+        // This enables TAP vs HOLD behavior
         if (timer_elapsed(reset_timer) > RESET_DELAY) {
           reset_keyboard();
+        } else {
+          register_code(KC_TAB);
+          unregister_code(KC_TAB);
         }
       }
       return false;

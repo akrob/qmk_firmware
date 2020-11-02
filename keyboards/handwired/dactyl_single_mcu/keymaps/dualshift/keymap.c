@@ -56,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_CAPS,  KC_A  ,  KC_S  ,  KC_D  ,  KC_F  ,   KC_G ,                             KC_H  ,  KC_J  ,  KC_K  ,  KC_L  , KC_SCLN, KC_QUOT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT,  CTL_Z ,  ALT_X ,  GUI_C ,  SFT_V  ,  KC_B  ,                            KC_N  ,  SHF_M , GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
+     KC_LSFT,  CTL_Z ,  ALT_X ,  GUI_C ,  SFT_V  ,  KC_B  ,                            KC_N  ,  SFT_M , GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
   //└────────┴────────┼────────┼────────┼────────┴────────┘                          └────────┴────────┼────────┼────────┼────────┴────────┘
                        XXXXXXX, XXXXXXX,                                                                XXXXXXX, XXXXXXX,
   //                  └────────┴────────┼────────┬────────┐                          ┌────────┬────────┼────────┴────────┘
@@ -254,9 +254,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-            case SFT_D:
+            case SFT_V:
                 return false;
-            case SFT_K:
+            case SFT_M:
                 return false;
             default:
                 return true;

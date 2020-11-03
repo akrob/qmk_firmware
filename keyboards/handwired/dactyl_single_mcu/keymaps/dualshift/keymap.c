@@ -205,23 +205,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Shift aid - disabling shift for problem bigrams
     // https://www.reddit.com/r/ErgoMechKeyboards/comments/ibsi0k/your_experiences_with_modlayer_tap/
     // https://github.com/precondition/qmk_firmware/blob/user-precondition/keyboards/handwired/dactyl_manuform/5x6/keymaps/precondition/keymap.c
-    // case ALT_L:
-    //     // This piece of code nullifies the effect of Right Shift when
-    //     // tapping the K (colemak I) key. This helps rolling over colemak E and I
-    //     // to obtain the intended "ei" instead of "I". Consequently, capital I can
-    //     // only be obtained by holding d (colemak s) and tapping L (colemak i) (which is the left shift mod tap).
-    //     if (record->event.pressed && record->tap.count == 1 && !record->tap.interrupted) {
-    //         if (mod_state & MOD_BIT(KC_RSHIFT)) {
-    //             unregister_code(KC_RSHIFT);
-    //             tap_code(KC_K);
-    //             tap_code(KC_L);
-    //             set_mods(mod_state);
-    //             return false;
-    //         }
-    //     }
-    //     // else process as usual.
-    //   return true;
-    //   break;
+     case KC_K:
+         // This piece of code nullifies the effect of Right Shift when
+         // tapping the K (colemak I) key. This helps rolling over colemak E and I
+         // to obtain the intended "ei" instead of "I". Consequently, capital I can
+         // only be obtained by holding d (colemak s) and tapping L (colemak i) (which is the left shift mod tap).
+         // above comments are wrong, but the idea is the same just a different key combo
+         if (record->event.pressed && record->tap.count == 1 && !record->tap.interrupted) {
+             if (mod_state & MOD_BIT(KC_RSHIFT)) {
+                 unregister_code(KC_RSHIFT);
+                 tap_code(KC_M);
+                 tap_code(KC_K);
+                 set_mods(mod_state);
+                 return false;
+             }
+         }
+         // else process as usual.
+       return true;
+       break;
   }
   return true;
 }

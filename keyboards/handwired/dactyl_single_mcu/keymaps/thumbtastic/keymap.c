@@ -27,13 +27,15 @@ static uint16_t key_timer;
 static uint16_t reset_timer;
 bool rlocked = false;
 bool llocked = false;
+bool ismac = false;
 
 enum custom_keycodes {
   RIGHT = SAFE_RANGE,
   LEFT,
   RLOCK,
   LLOCK,
-  RSTDL
+  RSTDL,
+  OSTOG
 };
 
 #define ALT_DOT     ALT_T(KC_DOT)
@@ -85,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_END ,                           KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, KC_PSCR, XXXXXXX, KC_SPC , XXXXXXX, KC_SINS,                           KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
+     _______, KC_PSCR, XXXXXXX, KC_SPC , KC_ENT , KC_SINS,                           KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
   //└────────┴────────┼────────┼────────┼────────┴────────┘                         └────────┴────────┼────────┼────────┼────────┴────────┘
                        _______, _______,                                                               _______, _______,
   //                  └────────┴────────┼────────┬────────┐                         ┌────────┬────────┼────────┴────────┘
@@ -98,7 +100,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_DUAL] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            KC_MUTE, KC_VOLD, KC_VOLU, KC_BRID, KC_BRIU, XXXXXXX,
+      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  OSTOG ,                            KC_MUTE, KC_VOLD, KC_VOLU, KC_BRID, KC_BRIU, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      XXXXXXX,  KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 ,  KC_F5 ,                             KC_F6 ,  KC_F7 ,  KC_F8 ,  KC_F9 ,  KC_F10, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -196,14 +198,86 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-  }
+    case OSTOG:
+      if (record->event.pressed){
+        if (ismac == false){
+          ismac = true;
+        } else {
+          ismac = false;
+        }
+      }
+      return false;
+      break;
+    case KC_HOME:
+      if (record->event.pressed){
+        if (ismac == false){
+          register_code(KC_PGUP);
+          unregister_code(KC_PGUP);
+        } else {
+          register_code(KC_HOME);
+          unregister_code(KC_HOME);
+        }
+      }
+      return false;
+      break;
+    case KC_END:
+      if (record->event.pressed){
+        if (ismac == false){
+          register_code(KC_PGDN);
+          unregister_code(KC_PGDN);
+        } else {
+          register_code(KC_END);
+          unregister_code(KC_END);
+        }
+      }
+      return false;
+      break;
+    case KC_PGUP:
+      if (record->event.pressed){
+        if (ismac == false){
+          register_code(KC_HOME);
+          unregister_code(KC_HOME);
+        } else {
+          register_code(KC_PGUP);
+          unregister_code(KC_PGUP);
+        }
+      }
+      return false;
+      break;
+    case KC_PGDN:
+      if (record->event.pressed){
+        if (ismac == false){
+          register_code(KC_END);
+          unregister_code(KC_END);
+        } else {
+          register_code(KC_PGDN);
+          unregister_code(KC_PGDN);
+        }
+      }
+      return false;
+      break;
+ }
   return true;
 }
 
-void matrix_init_user(void) {
-
-}
-
-void led_set_user(uint8_t usb_led) {
-
+/*
+ * Per key tapping term settings
+ */
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case CTL_Z:
+            return TAPPING_TERM + 50;
+        case CT_SLSH:
+            return TAPPING_TERM + 50;
+        case ALT_X:
+            return TAPPING_TERM + 25;
+        case ALT_DOT:
+            return TAPPING_TERM + 25;
+        case GUI_C:
+            return TAPPING_TERM - 50;
+        case GU_COMM:
+            return TAPPING_TERM - 50;
+        default:
+            return TAPPING_TERM;
+    }
 }

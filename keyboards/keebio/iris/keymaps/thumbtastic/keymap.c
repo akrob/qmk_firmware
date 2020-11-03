@@ -13,6 +13,7 @@ static uint16_t key_timer;
 static uint16_t reset_timer;
 bool rlocked = false;
 bool llocked = false;
+bool isthinkpad = false;
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
@@ -20,7 +21,8 @@ enum custom_keycodes {
   LEFT,
   RLOCK,
   LLOCK,
-  RSTDL
+  RSTDL,
+  OSTOG
 };
 
 #define ALT_DOT     ALT_T(KC_DOT)
@@ -51,9 +53,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     XXXXXXX, KC_TILD, KC_GRV, KC_LBRC, KC_RBRC,  XXXXXXX,                            KC_HOME, KC_PGUP,   KC_UP, KC_PGDN, XXXXXXX,  RLOCK,
+     XXXXXXX, KC_TILD, KC_GRV, KC_LBRC, KC_RBRC,  XXXXXXX,                            KC_PGUP, KC_HOME,  KC_UP , KC_END , XXXXXXX,  RLOCK,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, KC_EXLM, KC_AT , KC_LPRN, KC_RPRN,  KC_DLR,                             KC_END , KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_UNDS,
+     _______, KC_EXLM, KC_AT , KC_LPRN, KC_RPRN,  KC_DLR,                             KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_UNDS,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______, KC_HASH, KC_PERC,KC_LCBR, KC_RCBR,  XXXXXXX, XXXXXXX,          XXXXXXX, KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS, KC_EQL , _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
@@ -65,11 +67,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-      LLOCK , XXXXXXX, KC_PGUP,  KC_UP , KC_PGDN, KC_HOME,                            KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
+      LLOCK , XXXXXXX, KC_HOME,  KC_UP , KC_END , KC_PGUP,                            KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_END ,                            KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
+     _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,                            KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, KC_PSCR, XXXXXXX, KC_SPC , XXXXXXX, KC_SINS, XXXXXXX,          XXXXXXX, KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
+     _______, KC_PSCR, XXXXXXX, KC_SPC , KC_ENT , KC_SINS, XXXXXXX,          XXXXXXX, KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______,  KC_0  , _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -77,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_DUAL] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, BL_DEC , BL_INC , XXXXXXX,
+      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  OSTOG  ,                            XXXXXXX, XXXXXXX, XXXXXXX, BL_DEC , BL_INC , XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
       RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            KC_MUTE, KC_VOLD, KC_VOLU, KC_BRID, KC_BRIU, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -153,6 +155,64 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } else {
           register_code(KC_TAB);
           unregister_code(KC_TAB);
+        }
+      }
+      return false;
+      break;
+    case OSTOG:
+      if (record->event.pressed){
+        if (isthinkpad == false){
+          isthinkpad = true;
+        } else {
+          isthinkpad = false;
+        }
+      }
+      return false;
+      break;
+    case KC_HOME:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_PGUP);
+          unregister_code(KC_PGUP);
+        } else {
+          register_code(KC_HOME);
+          unregister_code(KC_HOME);
+        }
+      }
+      return false;
+      break;
+    case KC_END:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_PGDN);
+          unregister_code(KC_PGDN);
+        } else {
+          register_code(KC_END);
+          unregister_code(KC_END);
+        }
+      }
+      return false;
+      break;
+    case KC_PGUP:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_HOME);
+          unregister_code(KC_HOME);
+        } else {
+          register_code(KC_PGUP);
+          unregister_code(KC_PGUP);
+        }
+      }
+      return false;
+      break;
+    case KC_PGDN:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_END);
+          unregister_code(KC_END);
+        } else {
+          register_code(KC_PGDN);
+          unregister_code(KC_PGDN);
         }
       }
       return false;

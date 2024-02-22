@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_DUAL] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  OSTOG  ,                            XXXXXXX, XXXXXXX, XXXXXXX, BL_DEC , BL_INC , XXXXXXX,
+      RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  OSTOG  ,                            XXXXXXX, XXXXXXX, XXXXXXX,BL_DOWN,  BL_UP , XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
       RESET , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            KC_MUTE, KC_VOLD, KC_VOLU, KC_BRID, KC_BRIU, XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤

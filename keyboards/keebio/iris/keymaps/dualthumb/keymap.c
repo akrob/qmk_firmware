@@ -103,13 +103,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case RIGHT:
       if (record->event.pressed) {
         rlocked = false;
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
         layer_on(_RIGHT);
         update_tri_layer(_LEFT, _RIGHT, _DUAL);
       } else {
         // This enables TAP vs HOLD behavior
         if (timer_elapsed(key_timer) < KEY_DELAY) {
-          register_code(KC_SPC);
-          unregister_code(KC_SPC);
+          register_code(KC_SPACE);
+          unregister_code(KC_SPACE);
         }
         if (rlocked == false){
           layer_off(_RIGHT);

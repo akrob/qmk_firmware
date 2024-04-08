@@ -7,7 +7,8 @@
 #define _DUAL 3
 
 // Used for Custom Tap/Hold for layers
-#define KEY_DELAY 150
+#define TAB_DELAY 150
+#define SPACE_DELAY 300
 static uint16_t key_timer;
 #define RESET_DELAY 5000
 static uint16_t reset_timer;
@@ -107,8 +108,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_on(_RIGHT);
         update_tri_layer(_LEFT, _RIGHT, _DUAL);
       } else {
-        // This enables TAP vs HOLD behavior
-        if (timer_elapsed(key_timer) < KEY_DELAY) {
+        // This enables SPACE vs HOLD behavior
+        if (timer_elapsed(key_timer) < SPACE_DELAY) {
           register_code(KC_SPACE);
           unregister_code(KC_SPACE);
         }
@@ -127,7 +128,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         update_tri_layer(_LEFT, _RIGHT, _DUAL);
       } else {
         // This enables TAP vs HOLD behavior
-        if (timer_elapsed(key_timer) < KEY_DELAY) {
+        if (timer_elapsed(key_timer) < TAB_DELAY) {
           register_code(KC_TAB);
           unregister_code(KC_TAB);
         }

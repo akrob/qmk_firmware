@@ -8,7 +8,7 @@
 
 // Used for Custom Tap/Hold for layers
 #define TAB_DELAY 150
-#define SPACE_DELAY 225
+#define SPACE_DELAY 175
 static uint16_t key_timer;
 #define RESET_DELAY 5000
 static uint16_t reset_timer;

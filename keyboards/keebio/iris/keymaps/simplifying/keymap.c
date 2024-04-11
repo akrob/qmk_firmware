@@ -18,6 +18,7 @@ bool isthinkpad = false;
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
+  DUAL,
   RLOCK,
   LLOCK,
   RSTDL,

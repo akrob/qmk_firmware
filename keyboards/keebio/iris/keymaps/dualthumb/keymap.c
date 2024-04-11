@@ -46,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_LSFT, CTL_Z,   ALT_X,   GUI_C,   KC_V,    KC_B,     LEFT  ,           RIGHT , KC_N,    KC_M,    GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    XXXXXXX,  LEFT  , KC_BSPC,                    KC_ENT,  RIGHT , XXXXXXX
+                                    XXXXXXX,  LEFT  , KC_BSPC,                    KC_ENT,  LT(_RIGHT, KC_SPC) , XXXXXXX
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
@@ -93,11 +93,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(_RIGHT, KC_SPC):
+            // Immediately select the hold action when another key is tapped.
+            return true;
+        default:
+            // Do not select the hold action when another key is tapped.
+            return false;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_QWERTY);
+      }
+      return false;
+      break;
+    case LT(_RIGHT, KC_SPC):
+      if (record->event.pressed) {
+        rlocked = false;
+        layer_on(_RIGHT);
+        update_tri_layer(_LEFT, _RIGHT, _DUAL);
+      } else {
+        if (rlocked == false){
+          layer_off(_RIGHT);
+          update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        }
       }
       return false;
       break;

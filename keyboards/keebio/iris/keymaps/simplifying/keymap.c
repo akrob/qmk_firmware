@@ -94,16 +94,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-#bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-#    switch (keycode) {
-#        case LT(_RIGHT, KC_SPC):
-#            // Immediately select the hold action when another key is tapped.
-#            return true;
-#        default:
-#            // Do not select the hold action when another key is tapped.
-#            return false;
-#    }
-#}
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(_RIGHT, KC_DELETE):
+            // Immediately select the hold action when another key is tapped.
+            return true;
+        default:
+            // Do not select the hold action when another key is tapped.
+            return false;
+    }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {

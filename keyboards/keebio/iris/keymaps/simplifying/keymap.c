@@ -104,7 +104,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case RGHT_SP:
-            return 140;
+            return 160;
         default:
             return TAPPING_TERM;
     }

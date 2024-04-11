@@ -44,6 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define RETRO_TAPPING_PER_KEY
 #define TAPPING_TERM 175
+#define QUICK_TAP_TERM 0
 //#define TAPPING_FORCE_HOLD
 //#define RETRO_TAPPING
 

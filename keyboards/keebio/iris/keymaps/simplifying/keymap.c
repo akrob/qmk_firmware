@@ -18,8 +18,6 @@ bool isthinkpad = false;
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
-  RIGHT,
-  LEFT,
   RLOCK,
   LLOCK,
   RSTDL,
@@ -44,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT, CTL_Z,   ALT_X,   GUI_C,   KC_V,    KC_B,     LEFT  ,           RIGHT , KC_N,    KC_M,    GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
+     KC_LSFT, CTL_Z,   ALT_X,   GUI_C,   KC_V,    KC_B,     DUAL,             DUAL,   KC_N,    KC_M,    GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                  XXXXXXX,LT(_LEFT, KC_TAB), KC_BSPC,          KC_ENT,LT(_RIGHT, KC_SPACE), XXXXXXX
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -96,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(_RIGHT, KC_DELETE):
+        case LT(_RIGHT, KC_SPACE):
             // Immediately select the hold action when another key is tapped.
             return true;
         default:
@@ -113,43 +111,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case RIGHT:
+    case DUAL:
       if (record->event.pressed) {
-        rlocked = false;
-        key_timer = timer_read(); // if the key is being pressed, we start the timer.
-        layer_on(_RIGHT);
-        update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        layer_on(_DUAL);
       } else {
-        // This enables SPACE vs HOLD behavior
-        if (timer_elapsed(key_timer) < SPACE_DELAY) {
-          register_code(KC_SPACE);
-          unregister_code(KC_SPACE);
-        }
-        if (rlocked == false){
-          layer_off(_RIGHT);
-          update_tri_layer(_LEFT, _RIGHT, _DUAL);
-        }
+        layer_off(_DUAL);
       }
-      return false;
-      break;
-    case LEFT:
-      if (record->event.pressed) {
-        llocked = false;
-        key_timer = timer_read(); // if the key is being pressed, we start the timer.
-        layer_on(_LEFT);
-        update_tri_layer(_LEFT, _RIGHT, _DUAL);
-      } else {
-        // This enables TAP vs HOLD behavior
-        if (timer_elapsed(key_timer) < TAB_DELAY) {
-          register_code(KC_TAB);
-          unregister_code(KC_TAB);
-        }
-        if (llocked == false){
-          layer_off(_LEFT);
-          update_tri_layer(_LEFT, _RIGHT, _DUAL);
-        }
-      }
-      return false;
+      return true;
       break;
     case RLOCK:
       if (record->event.pressed) {

@@ -94,9 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case RGHT_SP:
             // Immediately select the hold action when another key is tapped.
-            return true;
         default:
             // Do not select the hold action when another key is tapped.
             return false;
@@ -106,7 +104,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case RGHT_SP:
-            return 150;
+            return 140;
         default:
             return TAPPING_TERM;
     }
@@ -114,11 +112,22 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        // Immediately select the hold action when another key is pressed.
+        case RGHT_SP:
+            return true;
         case CTL_Z:
-            // Immediately select the hold action when another key is pressed.
             return true;
         default:
             // Do not select the hold action when another key is pressed.
+            return false;
+    }
+}
+
+bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case RGHT_SP:
+            return true;
+        default:
             return false;
     }
 }

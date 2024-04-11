@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define IGNORE_MOD_TAP_INTERRUPT (This is now the default)
 #define PERMISIVE_HOLD_PER_KEY
 #define TAPPING_TERM_PER_KEY
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define TAPPING_TERM 175
 //#define TAPPING_FORCE_HOLD
 //#define RETRO_TAPPING

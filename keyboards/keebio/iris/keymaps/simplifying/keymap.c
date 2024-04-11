@@ -24,11 +24,13 @@ enum custom_keycodes {
 
 #define ALT_DOT     ALT_T(KC_DOT)
 #define ALT_X       ALT_T(KC_X)
-#define CT_SLSH    CTL_T(KC_SLSH)
+#define CT_SLSH     CTL_T(KC_SLSH)
 #define CTL_Z       CTL_T(KC_Z)
 #define GUI_C       GUI_T(KC_C)
-#define GU_COMM    GUI_T(KC_COMM)
+#define GU_COMM     GUI_T(KC_COMM)
 #define KC_SINS     LSFT(KC_INS)
+#define RGHT_SP     LT(_RIGHT, KC_SPACE)
+#define LFT_TAB     LT(_LEFT, KC_TAB)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -42,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_LSFT, CTL_Z,   ALT_X,   GUI_C,   KC_V,    KC_B,     DUAL,             DUAL,   KC_N,    KC_M,    GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                 XXXXXXX,LT(_LEFT, KC_TAB), KC_BSPC,          KC_ENT,LT(_RIGHT, KC_SPACE), XXXXXXX
+                                    XXXXXXX, LFT_TAB, KC_BSPC,                   KC_ENT,  RGHT_SP, XXXXXXX
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
@@ -90,22 +92,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case RGHT_SP:
+            // Immediately select the hold action when another key is tapped.
+            return true;
+        default:
+            // Do not select the hold action when another key is tapped.
+            return false;
+    }
+}
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(_RIGHT, KC_SPACE):
+        case RGHT_SP:
             return 150;
         default:
             return TAPPING_TERM;
     }
 }
 
-bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(_RIGHT, KC_SPACE):
-            // Immediately select the hold action when another key is tapped.
+        case CTL_Z:
+            // Immediately select the hold action when another key is pressed.
             return true;
         default:
-            // Do not select the hold action when another key is tapped.
+            // Do not select the hold action when another key is pressed.
             return false;
     }
 }

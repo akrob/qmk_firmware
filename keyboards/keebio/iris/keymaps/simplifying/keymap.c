@@ -1,0 +1,242 @@
+#include QMK_KEYBOARD_H
+
+
+#define _QWERTY 0
+#define _RIGHT 1
+#define _LEFT 2
+#define _DUAL 3
+
+// Used for Custom Tap/Hold for layers
+#define TAB_DELAY 150
+#define SPACE_DELAY 175
+static uint16_t key_timer;
+#define RESET_DELAY 5000
+static uint16_t reset_timer;
+bool rlocked = false;
+bool llocked = false;
+bool isthinkpad = false;
+
+enum custom_keycodes {
+  QWERTY = SAFE_RANGE,
+  RIGHT,
+  LEFT,
+  RLOCK,
+  LLOCK,
+  RSTDL,
+  OSTOG
+};
+
+#define ALT_DOT     ALT_T(KC_DOT)
+#define ALT_X       ALT_T(KC_X)
+#define CT_SLSH    CTL_T(KC_SLSH)
+#define CTL_Z       CTL_T(KC_Z)
+#define GUI_C       GUI_T(KC_C)
+#define GU_COMM    GUI_T(KC_COMM)
+#define KC_SINS     LSFT(KC_INS)
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+
+  [_QWERTY] = LAYOUT(
+  //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
+     XXXXXXX, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                            KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_DEL ,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+      RSTDL , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     KC_LSFT, CTL_Z,   ALT_X,   GUI_C,   KC_V,    KC_B,     LEFT  ,           RIGHT , KC_N,    KC_M,    GU_COMM, ALT_DOT, CT_SLSH, KC_RSFT,
+  //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
+                                 XXXXXXX,LT(_LEFT,KC_TAB), KC_BSPC,          KC_ENT,LT(_RIGHT,KC_SPC), XXXXXXX
+                                // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
+  ),
+
+  [_RIGHT] = LAYOUT(
+  //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
+     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     XXXXXXX, KC_TILD, KC_GRV, KC_LBRC, KC_RBRC,  XXXXXXX,                            KC_PGUP, KC_HOME,  KC_UP , KC_END , XXXXXXX,  RLOCK,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, KC_EXLM, KC_AT , KC_LPRN, KC_RPRN,  KC_DLR,                             KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_MINS, KC_UNDS,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, KC_HASH, KC_PERC,KC_LCBR, KC_RCBR,  XXXXXXX, _______,          _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS, KC_EQL , _______,
+  //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
+                                    _______,LT(_DUAL,XXXXXXX), _______,                   _______, _______, _______
+                                // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
+  ),
+
+  [_LEFT] = LAYOUT(
+  //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
+     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+      LLOCK , XXXXXXX, KC_HOME,  KC_UP , KC_END , KC_PGUP,                            KC_ASTR,  KC_7  ,  KC_8  ,  KC_9  , KC_PLUS, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,                            KC_SLSH,  KC_4  ,  KC_5  ,  KC_6  , KC_MINS, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, KC_PSCR, XXXXXXX, KC_SPC , KC_ENT , KC_SINS, _______,          _______, KC_EQL ,  KC_1  ,  KC_2  ,  KC_3  , KC_DOT , _______,
+  //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
+                                    _______, _______, _______,                   _______,LT(_DUAL,KC_0), _______
+                                // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
+  ),
+
+  [_DUAL] = LAYOUT(
+  //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
+     QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  OSTOG  ,                            XXXXXXX, XXXXXXX, XXXXXXX,BL_DOWN,  BL_UP , XXXXXXX,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            KC_MUTE, KC_VOLD, KC_VOLU, KC_BRID, KC_BRIU, XXXXXXX,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     XXXXXXX,  KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 ,  KC_F5 ,                             KC_F6 ,  KC_F7 ,  KC_F8 ,  KC_F9 , KC_F10 , XXXXXXX,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     XXXXXXX, KC_F11 , KC_F12 , XXXXXXX, XXXXXXX, KC_BTN1, _______,          _______, KC_BTN2, XXXXXXX, KC_RGUI, KC_RALT, KC_RCTL, XXXXXXX,
+  //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
+                                    _______, _______, _______,                   _______, _______, _______
+                                // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
+  )
+};
+
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(_RIGHT, KC_SPC):
+            // Immediately select the hold action when another key is tapped.
+            return true;
+        default:
+            // Do not select the hold action when another key is tapped.
+            return false;
+    }
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case QWERTY:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_QWERTY);
+      }
+      return false;
+      break;
+    case RIGHT:
+      if (record->event.pressed) {
+        rlocked = false;
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+        layer_on(_RIGHT);
+        update_tri_layer(_LEFT, _RIGHT, _DUAL);
+      } else {
+        // This enables SPACE vs HOLD behavior
+        if (timer_elapsed(key_timer) < SPACE_DELAY) {
+          register_code(KC_SPACE);
+          unregister_code(KC_SPACE);
+        }
+        if (rlocked == false){
+          layer_off(_RIGHT);
+          update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        }
+      }
+      return false;
+      break;
+    case LEFT:
+      if (record->event.pressed) {
+        llocked = false;
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+        layer_on(_LEFT);
+        update_tri_layer(_LEFT, _RIGHT, _DUAL);
+      } else {
+        // This enables TAP vs HOLD behavior
+        if (timer_elapsed(key_timer) < TAB_DELAY) {
+          register_code(KC_TAB);
+          unregister_code(KC_TAB);
+        }
+        if (llocked == false){
+          layer_off(_LEFT);
+          update_tri_layer(_LEFT, _RIGHT, _DUAL);
+        }
+      }
+      return false;
+      break;
+    case RLOCK:
+      if (record->event.pressed) {
+        rlocked = true;
+      }
+      return false;
+      break;
+    case LLOCK:
+      if (record->event.pressed) {
+        llocked = true;
+      }
+      return false;
+      break;
+    case RSTDL:
+      if (record->event.pressed){
+        reset_timer = timer_read(); // if the key is being pressed, we start the timer.
+      } else {
+        // only RESET if it is REALLY being held 5+ seconds
+        // This enables TAP vs HOLD behavior
+        if (timer_elapsed(reset_timer) > RESET_DELAY) {
+          reset_keyboard();
+        } else {
+          register_code(KC_TAB);
+          unregister_code(KC_TAB);
+        }
+      }
+      return false;
+      break;
+    case OSTOG:
+      if (record->event.pressed){
+        if (isthinkpad == false){
+          isthinkpad = true;
+        } else {
+          isthinkpad = false;
+        }
+      }
+      return false;
+      break;
+    case KC_HOME:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_PGUP);
+          unregister_code(KC_PGUP);
+        } else {
+          register_code(KC_HOME);
+          unregister_code(KC_HOME);
+        }
+      }
+      return false;
+      break;
+    case KC_END:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_PGDN);
+          unregister_code(KC_PGDN);
+        } else {
+          register_code(KC_END);
+          unregister_code(KC_END);
+        }
+      }
+      return false;
+      break;
+    case KC_PGUP:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_HOME);
+          unregister_code(KC_HOME);
+        } else {
+          register_code(KC_PGUP);
+          unregister_code(KC_PGUP);
+        }
+      }
+      return false;
+      break;
+    case KC_PGDN:
+      if (record->event.pressed){
+        if (isthinkpad == true){
+          register_code(KC_END);
+          unregister_code(KC_END);
+        } else {
+          register_code(KC_PGDN);
+          unregister_code(KC_PGDN);
+        }
+      }
+      return false;
+      break;
+  }
+  return true;
+}
+
